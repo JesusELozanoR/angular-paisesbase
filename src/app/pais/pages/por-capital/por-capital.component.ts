@@ -12,6 +12,8 @@ export class PorCapitalComponent {
   termino: string = '';
   hayerror: boolean = false;
   paises : Country[]=[];
+  paisesSugeridos :Country[]=[];
+  barraSugerencias: boolean =false;
 
 
   buscar(termino: string){
@@ -30,8 +32,23 @@ export class PorCapitalComponent {
   
   sugerencias(termino: string){
     this.hayerror = false;
-    console.log(termino);
     this.termino = termino;
+    this.barraSugerencias = true;
+    if(termino.length==0){
+      this.paisesSugeridos=[];
+      this.barraSugerencias = false;
+      return
+    }
+    this.paisService.buscarCapital(termino)
+    .subscribe(
+      paises => this.paisesSugeridos=paises.splice(0,5),
+      (err)=> this.paisesSugeridos=[],
+    );
+  }
+
+  buscarSugerido(termino: string){
+    this.buscar(termino);
+    this.paisesSugeridos=[];
   }
 
 
